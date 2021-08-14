@@ -1,107 +1,78 @@
-function getPlot(id) {
-//Read json file
-d3.json("data/samples.json").then((data) => {   
-    console.log(data) 
 
-//Filter Data for top 10 
-var samples = data.samples.filter(top10 => top10.id.toString() === id)[0]; 
-
-//Get top 10 
-var samplevalues = (sample.sample_values.slice(0,10)).reverse(); 
-
-//Top 10 OTU
-var OTU_top = (samples.otu_ids.slice(0,10)).reverse(); 
-
-//Get OTU ID
-var OTU_id = OTU_top.map( x => "OTU" + x); 
-
-// console.log(OTU_id); 
-
-//Get labels for plot 
-var labels = samples.otu_labels.slice(0,10); 
-
-//Create trace 
-var trace = {
-    x: samplevalues,
-    y: OTU_id,
-    text: labels,  
-    type: "bar", 
-    orientation: "h", 
-}; 
-
-//Create data variable 
-var data = [trace];
-
-//create layout variable to set plot layout 
-var layout = {
-    title: "Top 10 OTU", 
-    yaxis: { 
-        tickmode: "linear",
-    }, 
-    margin: {
-        l:100,
-        r:100,
-        t:100,
-        b:30
-    }
-}; 
-
-// Create the bar plot 
-Plotly.newPlot("bar", data, layout); 
-
-//Create bubble chart 
-var trace1 = { 
-    x: samples.otu_ids, 
-    y: samples.sample_values, 
-    mode: "markers", 
-    marker: {
-        size:samples.sample_values, 
-        color: samples.otu_ids
-    }, 
-    text: samples.otu_labels
-}; 
-
-//Sett Bubble Bar layout 
-var layout_bar = {
-    xaxis:{title: "OTU ID"}, 
-    height:600, 
-    width: 1000
-}; 
-
-
-//Create data variable 
-var data1 = [trace1]; 
-
-//Create bubble plot 
-Plotly.newPlot("bubble", data1, layout_b); 
-
-}); 
-}
-
-
-
-
-
-
-
-//change functio
-function optionChanged(id) {
-    renderData(id);
-    getPlot0(id); 
- }
+d3.json('samples.json').then(({ names }) => {
+    names.forEach(name => {
+        d3.select('select').append('option').text(name)
+    });
+    renderData();
+});
 
 function renderData() {
-    var pick = d3.select("#selDataset");
+    var pick = d3.select('select').property('value');
 
-//Read
-
-    d3.json("data/samples.json").then((data) => { 
-        console.log(data); 
+    d3.json('samples.json').then(({ metadata, samples }) => {
+        var meta = metadata.filter(obj => obj.id == pick)[0];
+        var sample = samples.filter(obj => obj.id == pick)[0];
+        var { otu_ids, sample_values, otu_labels } = sample;
 
         d3.select('.panel-body').html('');
-        Object.entries(meta).forEach(([key,val]) =>{
-           d3.select('.panel-body').append('h5').text(key.toUpperCase()+': '+ val)
-        })}; 
+        Object.entries(meta).forEach(([key, val]) => {
+            d3.select('.panel-body').append('h5').text(key.toUpperCase() + ': ' + val)
+        });
+
+        var barData = [
+            {
+                y: otu_ids.slice(0, 10).reverse().map(x => 'OTU ' + x),
+                x: sample_values.slice(0, 10).reverse(),
+                text: otu_labels,
+                type: 'bar',
+                orientation: 'h'
+            }
+        ];
+
+        Plotly.newPlot('bar', barData);
+
+        var bubbleData = [{
+            x: otu_ids,
+            y: sample_values,
+            mode: 'markers',
+            text: otu_labels,  
+            marker: {
+                size: sample_values,
+                color: otu_ids,
+                colorscale:'Earth'
+            
+            }}];
+
+        var layout_b = {
+            xaxis:{title: " <b>OTU ID</b>"},
+            height: 500,
+            width: 1200
+        };
+
+        Plotly.newPlot('bubble', bubbleData, layout_b);
+
+
+        var gaugedata = [
+            {
+              domain: { x: [0, 1], y: [0, 1] },
+              value: meta.wfreq,
+              title: { text: "<b>Belly Button Wash Frequency</b> <br> Scrubs Per Week" },
+              type: "indicator",
+              mode: "gauge+number",
+              gauge: { axis: { range: [0, 9] } }
+            }
+          ];
+          
+          var layout = { width: 500, height: 500 };
+          Plotly.newPlot('gauge', gaugedata, layout);
+
+    });
+}
+
+function optionChanged() {
+    renderData();
+    getPlot();
+};
 
 
 
