@@ -10,58 +10,26 @@ The dataset reveals that a small handful of microbial species (also called opera
 
 This horizontal bar chart displays the top 10 OTUs found in the individual picked from the dropdown menu.
 
+![bar Chart](Images/hw01.png)
 
-  ![bar Chart](Images/hw01.png)
+## OTU Sample Data
 
-3. Create a bubble chart that displays each sample.
-
-* Use `otu_ids` for the x values.
-
-* Use `sample_values` for the y values.
-
-* Use `sample_values` for the marker size.
-
-* Use `otu_ids` for the marker colors.
-
-* Use `otu_labels` for the text values.
+The generated bubble chart displays all sample values and OTU id's. 
 
 ![Bubble Chart](Images/bubble_chart.png)
 
-4. Display the sample metadata, i.e., an individual's demographic information.
+## Demographics 
 
-5. Display each key-value pair from the metadata JSON object somewhere on the page.
+The side panel displays the sample metadata, i.e., an individual's demographic information.
 
-![hw](Images/hw03.png)
+![Demographics Chart](Images/demographics_info.png)
 
-6. Update all of the plots any time that a new sample is selected.
 
-Additionally, you are welcome to create any layout that you would like for your dashboard. An example dashboard is shown below:
+## Weekly Washing 
 
-![hw](Images/hw02.png)
+The following is a plot of the weekly washing frequency of the individual selected. 
 
-## Advanced Challenge Assignment (Optional)
-
-The following task is advanced and therefore optional.
-
-* Adapt the Gauge Chart from <https://plot.ly/javascript/gauge-charts/> to plot the weekly washing frequency of the individual.
-
-* You will need to modify the example gauge code to account for values ranging from 0 through 9.
-
-* Update the chart whenever a new sample is selected.
-
-![Weekly Washing Frequency Gauge](Images/gauge.png)
-
-## Deployment
-
-* Deploy your app to a free static page hosting service, such as GitHub Pages. Submit the links to your deployment and your GitHub repo.
-
-* Ensure your repository has regular commits (i.e. 20+ commits) and a thorough README.md file
-
-## Hints
-
-* Use `console.log` inside of your JavaScript code to see what your data looks like at each step.
-
-* Refer to the [Plotly.js documentation](https://plot.ly/javascript/) when building the plots.
+![Gauge Chart](Images/gauge.png)
 
 ### About the Data
 
